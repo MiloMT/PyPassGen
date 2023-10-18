@@ -22,9 +22,16 @@ import argparse
 # import cryptography
         
 def pass_gen(args):
-    # To do
-    pass
-
+    
+    password = ""
+    char_list = string.ascii_lowercase
+    
+    # Password generator dependent on char_num
+    for _ in range(int(args.char_num)):
+        password += random.choice(char_list)
+    
+    print(password)
+    
 def store_pass():
     # To do
     pass
@@ -48,7 +55,7 @@ parser = argparse.ArgumentParser(
     )
 
 # List of positional arguments
-parser.add_argument("char_num", metavar="Num_of_Chars", nargs="?", 
+parser.add_argument("char_num", metavar="Num_of_Chars",  
                     type=int, help="Number of characters in password.")
 parser.add_argument("pass_num", metavar="Num_of_Passwords", 
                     nargs="?", default=1, type=int, 
