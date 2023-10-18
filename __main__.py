@@ -24,11 +24,16 @@ import argparse
 def pass_gen(args):
     
     password = ""
-    char_list = string.ascii_lowercase
+    char_list = [string.ascii_lowercase]
+    
+    # Flags to check for password character types
+    if args.upper: char_list.append(string.ascii_uppercase)
+    if args.number: char_list.append(string.digits)
+    if args.special: char_list.append(string.punctuation)
     
     # Password generator dependent on char_num
     for _ in range(int(args.char_num)):
-        password += random.choice(char_list)
+        password += random.choice(random.choice(char_list))
     
     print(password)
     
