@@ -20,10 +20,20 @@ import argparse
 # import pyperclip
 # import re
 # import cryptography
+
+class PasswordList:
+    """Container for a password list"""
+    
+    def __init__(self, pass_list):
+        self.pass_list = pass_list
         
+    def __str__(self):
+        return "\n".join(self.pass_list)
+    
 def pass_gen(args):
     
     password = ""
+    pass_list = []
     char_list = [string.ascii_lowercase]
     
     # Flags to check for password character types
@@ -31,11 +41,17 @@ def pass_gen(args):
     if args.number: char_list.append(string.digits)
     if args.special: char_list.append(string.punctuation)
     
-    # Password generator dependent on char_num
-    for _ in range(int(args.char_num)):
-        password += random.choice(random.choice(char_list))
+    # Number of password to generate
+    for _ in range(args.pass_num):  
+        # Password generator dependent on char_num and arg flags
+        for _ in range(int(args.char_num)):
+            password += random.choice(random.choice(char_list))
+        
+        pass_list.append(password)
+        password = ""
     
-    print(password)
+    password_list = PasswordList(pass_list)
+    print(str(password_list))
     
 def store_pass():
     # To do
