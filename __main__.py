@@ -17,7 +17,7 @@ import random
 import sys
 import string
 import argparse
-# import pyperclip
+import pyperclip
 # import re
 # import cryptography
 
@@ -50,6 +50,9 @@ def pass_gen(args):
         pass_list.append(password)
         password = ""
     
+    # Copy passwords if flag entered
+    if args.copy: pyperclip.copy("\n".join(pass_list))
+    
     print("\n".join(pass_list))
     
     store_pass()
@@ -57,12 +60,16 @@ def pass_gen(args):
 @seperator
 def store_pass():
     # To do
-    confirmation = input("Would you like to save the passwords? 'Y' for yes, 'N' for no: ")
-    encrypt_pass()
+    if args.save:
+        # Check if passwords.txt already exists in current directory
+        # If it does, ask whether to overwrite or append passwords
+        # If not, say that file created
+        confirmation = input("Placeholder")
+        encrypt_pass()
 
 @seperator
 def encrypt_pass():
-    # To do
+    # Ask whether to encrypt password txt file
     print("Testing")
     pass
 
