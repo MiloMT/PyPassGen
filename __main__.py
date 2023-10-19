@@ -21,15 +21,15 @@ import argparse
 # import re
 # import cryptography
 
-class PasswordList:
-    """Container for a password list"""
+def seperator(func):
     
-    def __init__(self, pass_list):
-        self.pass_list = pass_list
+    def wrapper(*args):
+        print("--------------------------------------------------")
+        func(*args)
         
-    def __str__(self):
-        return "\n".join(self.pass_list)
-    
+    return wrapper
+
+@seperator
 def pass_gen(args):
     
     password = ""
@@ -50,17 +50,23 @@ def pass_gen(args):
         pass_list.append(password)
         password = ""
     
-    password_list = PasswordList(pass_list)
-    print(str(password_list))
+    print("\n".join(pass_list))
     
+    store_pass()
+
+@seperator
 def store_pass():
     # To do
-    pass
+    confirmation = input("Would you like to save the passwords? 'Y' for yes, 'N' for no: ")
+    encrypt_pass()
 
+@seperator
 def encrypt_pass():
     # To do
+    print("Testing")
     pass
 
+@seperator
 def retrieve_pass():
     # To do
     pass
@@ -102,6 +108,7 @@ parser.add_argument("-u", "--upper", help="Adds uppercase letters to "
 # Parse the passed arguments
 args = parser.parse_args()
 
+print("\nPasswords Generated:")
 pass_gen(args)
 
 if __name__ == "__main__":
