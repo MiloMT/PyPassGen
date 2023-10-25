@@ -27,11 +27,15 @@ def arg_check(
     var: string, arg1: string, arg1_desc: string, arg2: string, arg2_desc: string
 ) -> string:
     while var not in (arg1, arg2):
-        var = input(
-            f"Sorry, but that wasn't a valid input. Please enter"
-            f"a [{arg1.upper()}] for {arg1_desc} or [{arg2.upper()}] "
-            f"for {arg2_desc}: ",
-        ).lower().strip()
+        var = (
+            input(
+                f"Sorry, but that wasn't a valid input. Please enter"
+                f"a [{arg1.upper()}] for {arg1_desc} or [{arg2.upper()}] "
+                f"for {arg2_desc}: ",
+            )
+            .lower()
+            .strip()
+        )
 
     return var
 
@@ -63,7 +67,7 @@ def pass_gen(args: object, regex: string = None) -> list:
                         password += random.choice(string.digits)
                     case "s":
                         password += random.choice(string.punctuation)
-                        
+
             pass_list.append(password)
             password = ""
     else:
@@ -99,10 +103,14 @@ def store_pass(args: object, pass_list: list) -> bool:
         write_type = arg_check(write_type, "w", "overwrite", "a", "append")
         # Ask user to confirm overwrite as long as ignore option wasn't used.
         if write_type == "w" and args.force == False:
-            overwrite_confirm = input(
-                "This will overwrite your existing"
-                " password file, are you sure? [Y] or [N]: "
-            ).lower().strip()
+            overwrite_confirm = (
+                input(
+                    "This will overwrite your existing"
+                    " password file, are you sure? [Y] or [N]: "
+                )
+                .lower()
+                .strip()
+            )
             overwrite_confirm = arg_check(overwrite_confirm, "y", "yes", "n", "no")
 
         # Checks if force flag used or if user has confirmed overwrite.
@@ -166,11 +174,14 @@ def regex_gen() -> string:
             "Your expression is not valid. The invalid characters are:\n"
             f"{"\n - ".join(char_list)}\n"
         )
-        regex = input("Please try to input another expression: ").lower().replace(" ", "")
+        regex = (
+            input("Please try to input another expression: ").lower().replace(" ", "")
+        )
         for x in regex:
             if x not in ("l", "u", "n", "s"):
                 char_list.append(x)
     return regex
+
 
 def main(args):
     if args.view:
@@ -180,13 +191,15 @@ def main(args):
             regex = regex_gen()
             print("\nPasswords Generated:")
             pass_list = pass_gen(args, regex)
-        else: 
+        else:
             print("Passwords Generated:")
             pass_list = pass_gen(args)
-        
-        save_confirm = input(
-            "Would you like to save your generated passwords? [Y] or [N]: "
-        ).lower().strip()
+
+        save_confirm = (
+            input("Would you like to save your generated passwords? [Y] or [N]: ")
+            .lower()
+            .strip()
+        )
         save_confirm = arg_check(save_confirm, "y", "yes", "n", "no")
 
         if save_confirm == "y":
@@ -194,9 +207,11 @@ def main(args):
 
         # Only asks to encrypt is passwords were saved
         if is_saved == True:
-            encrypt_confirm = input(
-                "Would you like to encrypt your saved passwords? [Y] or [N]: "
-            ).lower().strip()
+            encrypt_confirm = (
+                input("Would you like to encrypt your saved passwords? [Y] or [N]: ")
+                .lower()
+                .strip()
+            )
             encrypt_confirm = arg_check(encrypt_confirm, "y", "yes", "n", "no")
 
             if encrypt_confirm == "y":
@@ -215,7 +230,7 @@ if __name__ == "__main__":
         "char_num",
         metavar="Num_of_Chars",
         nargs="?",
-        default = 10,
+        default=10,
         type=int,
         help="Optionally enter a number of characters in password. (default: 10)",
     )
