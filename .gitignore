@@ -1,3 +1,5 @@
 .venv
 passwords.txt
 key.txt
+pylintrc
+pylintrc:Zone.Identifier

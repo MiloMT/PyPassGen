@@ -17,11 +17,11 @@ Typical Usage example:
 """
 
 import random
-import sys
 import string
 import argparse
-import pyperclip
 import os
+
+import pyperclip
 
 from cryptography.fernet import Fernet
 
@@ -51,7 +51,7 @@ def arg_check(
         ValueError: An error if value isn't as expected. Note: Not yet
         implemented.
     """
-    
+
     while var not in (arg1, arg2):
         var = (
             input(
@@ -66,7 +66,7 @@ def arg_check(
     return var
 
 
-def pass_gen(args: object, expression: string = None) -> list:
+def pass_gen(arguments: object, expression: string = None) -> list:
     """Password generator function.
     
     Generates password based on flags and expression (if
@@ -80,22 +80,22 @@ def pass_gen(args: object, expression: string = None) -> list:
     Returns:
         A list of generated passwords.
     """
-    
+
     password: str = ""
     pass_list: list = []
     char_list: list = [string.ascii_lowercase]
 
     # Flags to check for password character types.
-    if args.upper:
+    if arguments.upper:
         char_list.append(string.ascii_uppercase)
-    if args.number:
+    if arguments.number:
         char_list.append(string.digits)
-    if args.special:
+    if arguments.special:
         char_list.append(string.punctuation)
 
-    if expression != None:
+    if expression is not None:
         # Number of password to generate.
-        for _ in range(args.pass_num):
+        for _ in range(arguments.pass_num):
             # Password generator dependent on expression.
             for x in expression:
                 match x:
@@ -112,16 +112,16 @@ def pass_gen(args: object, expression: string = None) -> list:
             password = ""
     else:
         # Number of password to generate.
-        for _ in range(args.pass_num):
+        for _ in range(arguments.pass_num):
             # Password generator dependent on char_num and arg flags.
-            for _ in range(int(args.char_num)):
+            for _ in range(int(arguments.char_num)):
                 password += random.choice(random.choice(char_list))
 
             pass_list.append(password)
             password = ""
 
     # Copy passwords if flag entered.
-    if args.copy:
+    if arguments.copy:
         pyperclip.copy("\n".join(pass_list))
 
     # Formatted password printing
@@ -132,7 +132,7 @@ def pass_gen(args: object, expression: string = None) -> list:
     return pass_list
 
 
-def store_pass(args: object, pass_list: list) -> None:
+def store_pass(arguments: object, pass_list: list) -> None:
     """Password storage in text files.
     
     Receives a list of passwords and than proceeds to write
@@ -144,9 +144,9 @@ def store_pass(args: object, pass_list: list) -> None:
         args: Object containing parsed CLI arguments.
         pass_list: List of generated passwords.
     """
-    
+
     # Check if passwords.txt already exists in current directory.
-    if os.path.isfile("passwords.txt") == True:
+    if os.path.isfile("passwords.txt"):
         # If it does, ask whether to overwrite or append passwords.
         print("There is already a passwords file in the current directory.")
         write_type = input(
@@ -155,7 +155,7 @@ def store_pass(args: object, pass_list: list) -> None:
         )
         write_type = arg_check(write_type, "w", "overwrite", "a", "append")
         # Ask user to confirm overwrite as long as force option wasn't used.
-        if write_type == "w" and args.force == False:
+        if write_type == "w" and not arguments.force:
             overwrite_confirm = (
                 input(
                     "This will overwrite your existing"
@@ -167,18 +167,18 @@ def store_pass(args: object, pass_list: list) -> None:
             overwrite_confirm = arg_check(overwrite_confirm, "y", "yes", "n", "no")
 
         # Checks if force flag used or if user has confirmed overwrite.
-        if write_type == "a" or args.force == True or overwrite_confirm == "y":
-            with open("passwords.txt", write_type) as f:
+        if write_type == "a" or arguments.force or overwrite_confirm == "y":
+            with open("passwords.txt", write_type, encoding='UTF-8') as f:
                 # Add extra line to list if appending
                 if write_type == "a":
                     f.write("\n")
                 f.write("\n".join(pass_list))
         else:
             # Rerun save function if confirmation is denied
-            store_pass(args, pass_list)
+            store_pass(arguments, pass_list)
     else:
         # If passwords.text doesn't exist, automatically create file.
-        with open("passwords.txt", "w") as f:
+        with open("passwords.txt", "w", encoding='UTF-8') as f:
             f.write("\n".join(pass_list))
         print(
             "Your passwords have been saved in the 'passwords.txt'",
@@ -186,7 +186,7 @@ def store_pass(args: object, pass_list: list) -> None:
         )
 
 
-def encrypt_pass(args: object, pass_list: list) -> None:
+def encrypt_pass() -> None:
     """Encrypting stored passwords.
     
     Encrypts passwords stored in 'passwords.txt' based off either
@@ -194,15 +194,11 @@ def encrypt_pass(args: object, pass_list: list) -> None:
     stored in a file called 'key.txt' in the current directory. If
     the 'key.txt' file already exists, then the key in that file is
     used.
-    
-    Args:
-        args: Object containing parsed CLI arguments.
-        pass_list: List of generated passwords.
     """
-    
+
     # Check whether there is already an active key present
-    if os.path.isfile("key.txt") == True:
-        with open("key.txt", "r") as f:
+    if os.path.isfile("key.txt"):
+        with open("key.txt", "r", encoding='UTF-8') as f:
             key = f.read()
 
     else:
@@ -219,7 +215,7 @@ def encrypt_pass(args: object, pass_list: list) -> None:
     fernet = Fernet(key)
     # Take passwords from current file, this means that if there is
     # already a password list, it can encrypt pre-existing files
-    with open("passwords.txt", "r+") as f:
+    with open("passwords.txt", "r+", encoding='UTF-8') as f:
         data = f.read()
     # Encrypt password list into a byte object for encryption
     with open("passwords.txt", "wb") as f:
@@ -235,14 +231,14 @@ def retrieve_pass() -> None:
     if so, will decrypt the password prior to printing out. Also
     has the ability to copy the passwords from an existing file.
     """
-    
+
     if os.path.isfile("passwords.txt"):
         # Checks if encryption has been used
         if os.path.isfile("key.txt"):
-            with open("key.txt", "r") as f:
+            with open("key.txt", "r", encoding='UTF-8') as f:
                 key = f.read()
 
-            with open("passwords.txt", "r") as f:
+            with open("passwords.txt", "r", encoding='UTF-8') as f:
                 token = f.read()
 
             # Generates fernet object from existing key and
@@ -251,14 +247,14 @@ def retrieve_pass() -> None:
             pass_list = fernet.decrypt(token).decode("utf-8").split("\n")
         else:
             # Otherwise if no key.txt file exists, read passwords as per normal
-            with open("passwords.txt", "r") as f:
+            with open("passwords.txt", "r", encoding='UTF-8') as f:
                 data = f.read()
                 pass_list = data.split("\n")
 
         # If copy flag used, copies pass_list from file
         if args.copy:
             pyperclip.copy("\n".join(pass_list))
-        
+
         # Formatted password display
         print("Passwords in passwords.txt:")
         print("--------------------------------------------------")
@@ -285,7 +281,7 @@ def expression_gen() -> string:
         ValueError: An error if one of the chars isn't expected. Note: Not 
         yet implemented.
     """
-    
+
     invalid_chars: list = []
 
     print(
@@ -320,7 +316,7 @@ def expression_gen() -> string:
     return expression
 
 
-def main(args):
+def main(arguments):
     """PyPassGen main functionality.
     
     If this is the main module, runs the standard PyPassGen functionality.
@@ -333,19 +329,19 @@ def main(args):
     Args:
         args: Object containing parsed CLI arguments.
     """
-    
+
     # If view mode, ignore generator
-    if args.view:
+    if arguments.view:
         retrieve_pass()
     else:
         # Check if expression generation used first to pass expression
-        if args.expression:
+        if arguments.expression:
             expression = expression_gen()
             print("\nPasswords Generated:")
-            pass_list = pass_gen(args, expression)
+            pass_list = pass_gen(arguments, expression)
         else:
             print("Passwords Generated:")
-            pass_list = pass_gen(args)
+            pass_list = pass_gen(arguments)
 
         # Prompts user to check if they want to save.
         save_confirm = (
@@ -356,7 +352,7 @@ def main(args):
         save_confirm = arg_check(save_confirm, "y", "yes", "n", "no")
 
         if save_confirm == "y":
-            store_pass(args, pass_list)
+            store_pass(arguments, pass_list)
             # Checks for encryption if user has prompted to save
             encrypt_confirm = (
                 input("Would you like to encrypt your saved passwords? [Y] or [N]: ")
@@ -366,7 +362,7 @@ def main(args):
             encrypt_confirm = arg_check(encrypt_confirm, "y", "yes", "n", "no")
 
             if encrypt_confirm == "y":
-                encrypt_pass(args, pass_list)
+                encrypt_pass()
 
 
 if __name__ == "__main__":
