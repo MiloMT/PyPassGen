@@ -32,7 +32,7 @@ def arg_check(
             f"Sorry, but that wasn't a valid input. Please enter"
             f"a [{arg1.upper()}] for {arg1_desc} or [{arg2.upper()}] "
             f"for {arg2_desc}: ",
-        ).lower()
+        ).lower().strip()
 
     return var
 
@@ -85,11 +85,11 @@ def store_pass(args: object, pass_list: list) -> bool:
             overwrite_confirm = input(
                 "This will overwrite your existing"
                 " password file, are you sure? [Y] or [N]: "
-            ).lower()
+            ).lower().strip()
             overwrite_confirm = arg_check(overwrite_confirm, "y", "yes", "n", "no")
 
         # Checks if force flag used or if user has confirmed overwrite.
-        if overwrite_confirm == "y" or args.force == True:
+        if write_type == "a" or args.force == True or overwrite_confirm == "y":
             with open("passwords.txt", write_type) as f:
                 if write_type == "a":
                     f.write("\n")
@@ -118,9 +118,8 @@ def encrypt_pass(args: object, pass_list: list) -> None:
     pass
 
 
-def retrieve_pass():
-    # To do
-    pass
+def retrieve_pass(args):
+    print("Viewing passwords instead")
 
 
 def regex_gen() -> string:
@@ -128,31 +127,34 @@ def regex_gen() -> string:
 
 
 def main(args):
-    if args.regex == True:
-        regex = regex_gen()
-        print("Passwords Generated:")
-        pass_list = pass_gen(args, regex)
-    else: 
-        print("Passwords Generated:")
-        pass_list = pass_gen(args)
+    if args.view:
+        retrieve_pass(args)
+    else:
+        if args.regex:
+            regex = regex_gen()
+            print("Passwords Generated:")
+            pass_list = pass_gen(args, regex)
+        else: 
+            print("Passwords Generated:")
+            pass_list = pass_gen(args)
         
-    save_confirm = input(
-        "Would you like to save your generated passwords? [Y] or [N]: "
-    ).lower()
-    save_confirm = arg_check(save_confirm, "y", "yes", "n", "no")
+        save_confirm = input(
+            "Would you like to save your generated passwords? [Y] or [N]: "
+        ).lower().strip()
+        save_confirm = arg_check(save_confirm, "y", "yes", "n", "no")
 
-    if save_confirm == "y":
-        is_saved = store_pass(args, pass_list)
+        if save_confirm == "y":
+            is_saved = store_pass(args, pass_list)
 
-    # Only asks to encrypt is passwords were saved
-    if is_saved == True:
-        encrypt_confirm = input(
-            "Would you like to encrypt your saved passwords? [Y] or [N]: "
-        ).lower()
-        encrypt_confirm = arg_check(encrypt_confirm, "y", "yes", "n", "no")
+        # Only asks to encrypt is passwords were saved
+        if is_saved == True:
+            encrypt_confirm = input(
+                "Would you like to encrypt your saved passwords? [Y] or [N]: "
+            ).lower().strip()
+            encrypt_confirm = arg_check(encrypt_confirm, "y", "yes", "n", "no")
 
-        if encrypt_confirm == "y":
-            encrypt_pass(args, pass_list)
+            if encrypt_confirm == "y":
+                encrypt_pass(args, pass_list)
 
 
 if __name__ == "__main__":
@@ -166,8 +168,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "char_num",
         metavar="Num_of_Chars",
+        nargs="?",
+        default = 10,
         type=int,
-        help="Number of characters in password.",
+        help="Optionally enter a number of characters in password. (default: 10)",
     )
     parser.add_argument(
         "pass_num",
@@ -216,6 +220,11 @@ if __name__ == "__main__":
         "-u",
         "--upper",
         help="Adds uppercase letters to password generation",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--view",
+        help="Instead of generating passwords, prints out encrypted passwords to terminal",
         action="store_true",
     )
 
