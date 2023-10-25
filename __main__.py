@@ -20,7 +20,6 @@ import argparse
 import pyperclip
 import os
 
-# import re
 # import cryptography
 
 
@@ -50,14 +49,32 @@ def pass_gen(args: object, regex: string = None) -> list:
     if args.special:
         char_list.append(string.punctuation)
 
-    # Number of password to generate.
-    for _ in range(args.pass_num):
-        # Password generator dependent on char_num and arg flags.
-        for _ in range(int(args.char_num)):
-            password += random.choice(random.choice(char_list))
+    if regex != None:
+        # Number of password to generate.
+        for _ in range(args.pass_num):
+            # Password generator dependent on char_num and arg flags.
+            for x in regex:
+                match x:
+                    case "l":
+                        password += random.choice(string.ascii_lowercase)
+                    case "u":
+                        password += random.choice(string.ascii_uppercase)
+                    case "n":
+                        password += random.choice(string.digits)
+                    case "s":
+                        password += random.choice(string.punctuation)
+                        
+            pass_list.append(password)
+            password = ""
+    else:
+        # Number of password to generate.
+        for _ in range(args.pass_num):
+            # Password generator dependent on char_num and arg flags.
+            for _ in range(int(args.char_num)):
+                password += random.choice(random.choice(char_list))
 
-        pass_list.append(password)
-        password = ""
+            pass_list.append(password)
+            password = ""
 
     # Copy passwords if flag entered.
     if args.copy:
@@ -131,8 +148,29 @@ def retrieve_pass(args):
 
 
 def regex_gen() -> string:
-    pass
-
+    print(
+        "You've selected to create an expression to use for password generation.\n"
+        "A password expression is created by using a sequence of characters in a\n"
+        "designated order. The characters to use are below:\n\n - [l] lowercase letter\n"
+        " - [u] uppercase letter\n - [n] digit\n - [s] special character\n\n"
+        "Please refer to the help guide for expression examples.\n"
+    )
+    regex = input("Please input a compatible expression: ").lower().replace(" ", "")
+    char_list = []
+    for x in regex:
+        if x not in ("l", "u", "n", "s"):
+            char_list.append(x)
+    while len(char_list) != 0:
+        char_list = []
+        print(
+            "Your expression is not valid. The invalid characters are:\n"
+            f"{"\n - ".join(char_list)}\n"
+        )
+        regex = input("Please try to input another expression: ").lower().replace(" ", "")
+        for x in regex:
+            if x not in ("l", "u", "n", "s"):
+                char_list.append(x)
+    return regex
 
 def main(args):
     if args.view:
@@ -140,7 +178,7 @@ def main(args):
     else:
         if args.regex:
             regex = regex_gen()
-            print("Passwords Generated:")
+            print("\nPasswords Generated:")
             pass_list = pass_gen(args, regex)
         else: 
             print("Passwords Generated:")
@@ -212,8 +250,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "-r",
         "--regex",
-        help="Lets the generator know that you want to create a"
-        " regular expression",
+        help="Lets the generator know that you want to create an"
+        " expression to control the password generation",
         action="store_true",
     )
     parser.add_argument(
