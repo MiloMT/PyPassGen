@@ -48,7 +48,8 @@ def arg_check(
         matches expected argument.
         
     Raises:
-        ValueError: An error if value isn't as expected.
+        ValueError: An error if value isn't as expected. Note: Not yet
+        implemented.
     """
     
     while var not in (arg1, arg2):
@@ -191,7 +192,7 @@ def encrypt_pass(args: object, pass_list: list) -> None:
     Encrypts passwords stored in 'passwords.txt' based off either
     new or existing key. If a new key is generated, the key is
     stored in a file called 'key.txt' in the current directory. If
-    the 'key.txt' file already exists, than the key in that file is
+    the 'key.txt' file already exists, then the key in that file is
     used.
     
     Args:
@@ -279,7 +280,10 @@ def expression_gen() -> string:
     
     Returns:
         An error checked expression to be used for password generation.
-
+        
+    Raises:
+        ValueError: An error if one of the chars isn't expected. Note: Not 
+        yet implemented.
     """
     
     invalid_chars: list = []
