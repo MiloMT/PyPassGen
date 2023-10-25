@@ -23,7 +23,8 @@ import os
 # import re
 # import cryptography
 
-def pass_gen(args):
+
+def pass_gen(args: object) -> list:
     password = ""
     pass_list = []
     char_list = [string.ascii_lowercase]
@@ -56,15 +57,19 @@ def pass_gen(args):
     return pass_list
 
 
-def store_pass(pass_list):
+def store_pass(pass_list: list) -> None:
     # Check if passwords.txt already exists in current directory
     if os.path.isfile("passwords.txt") == True:
         # If it does, ask whether to overwrite or append passwords
         print("There is already a passwords file in the current directory.")
-        write_confirm = input("Would you like to overwrite the file or append to this file? [W] or [A]: ")
+        write_confirm = input(
+            "Would you like to overwrite the file or append to",
+            "this file? [W] or [A]: "
+        )
         while write_confirm not in ("w", "a"):
             write_confirm = input(
-                "Sorry, but that wasn't a valid input. Please enter a [W] for overwrite or [A] for append: "
+                "Sorry, but that wasn't a valid input. Please enter a [W]",
+                "for overwrite or [A] for append: ",
             ).lower()
         with open("passwords.txt", write_confirm) as f:
             if write_confirm == "a":
@@ -104,7 +109,8 @@ def main(args):
     else:
         while save_confirm not in ("y", "n"):
             save_confirm = input(
-                "Sorry, but that wasn't a valid input. Please enter a [Y] for yes or [N] for no: "
+                "Sorry, but that wasn't a valid input. Please enter",
+                "a [Y] for yes or [N] for no: "
             ).lower()
 
 
@@ -134,22 +140,17 @@ if __name__ == "__main__":
         "regex",
         metavar="Regular_Expression",
         nargs="?",
-        default=None,
+        default=False,
         type=str,
-        help="Optionally create a regular " "expression for password generation.",
+        help="Optionally create a regular expression for password generation."
+        " (default: False)",
     )
 
     # List of options
     parser.add_argument(
         "-c",
         "--copy",
-        help="Copies the password to the " "clipboard once generated",
-        action="store_true",
-    )
-    parser.add_argument(
-        "-H",
-        "--hide",
-        help="Stops the password from printing " "to CLI",
+        help="Copies the password to the clipboard once generated",
         action="store_true",
     )
     parser.add_argument(
@@ -161,13 +162,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "-s",
         "--special",
-        help="Adds special characters to " "password generation",
+        help="Adds special characters to password generation",
         action="store_true",
     )
     parser.add_argument(
         "-u",
         "--upper",
-        help="Adds uppercase letters to " "password generation",
+        help="Adds uppercase letters to password generation",
         action="store_true",
     )
 
