@@ -157,21 +157,28 @@ def encrypt_pass(args: object, pass_list: list) -> None:
         token = fernet.encrypt(data.encode("utf-8"))
         f.write(token)
     
-    test_list = fernet.decrypt(token).decode("utf-8").split("\n")
-    print(test_list)
+    # test_list = fernet.decrypt(token).decode("utf-8").split("\n")
+    # print(test_list)
 
 def retrieve_pass(args):
     if os.path.isfile("passwords.txt"):
-        # Decrypting file is key exists.
-        # if os.path.isfile("key.txt"):
-        #     with open("key.txt", "r") as file:
-        #         fernet = Fernet(file.read())
+        # Checks if encryption has been used
+        if os.path.isfile("key.txt"):
+            with open("key.txt", "r") as f:
+                key = f.read()
+            fernet = Fernet(key)
+            with open("passwords.txt", "r") as f:
+                token = f.read()
+                pass_list = fernet.decrypt(token).decode("utf-8").split("\n")
+        else:
+            with open("passwords.txt", "r") as f:
+                data = f.read()
+                pass_list = data.split("\n")
         print("Passwords in passwords.txt:")
         print("--------------------------------------------------")
-        with open("passwords.txt", "r") as f:
-            for line in f:
-                print(line, end="")
-        print("\n--------------------------------------------------")
+        for password in pass_list:
+            print(password)
+        print("--------------------------------------------------")
     else:
         print("There is no password.txt file in the current directory.")
 
