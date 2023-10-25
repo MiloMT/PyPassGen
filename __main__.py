@@ -159,27 +159,27 @@ def regex_gen() -> string:
     print(
         "You've selected to create an expression to use for password generation.\n"
         "A password expression is created by using a sequence of characters in a\n"
-        "designated order. The characters to use are below:\n\n - [l] lowercase letter\n"
-        " - [u] uppercase letter\n - [n] digit\n - [s] special character\n\n"
+        "designated order. The characters to use are below:\n\n - [L] lowercase letter\n"
+        " - [U] uppercase letter\n - [N] digit\n - [S] special character\n\n"
         "Please refer to the help guide for expression examples.\n"
     )
     regex = input("Please input a compatible expression: ").lower().replace(" ", "")
     char_list = []
-    for x in regex:
-        if x not in ("l", "u", "n", "s"):
-            char_list.append(x)
-    while len(char_list) != 0:
-        char_list = []
-        print(
-            "Your expression is not valid. The invalid characters are:\n"
-            f"{"\n - ".join(char_list)}\n"
-        )
-        regex = (
-            input("Please try to input another expression: ").lower().replace(" ", "")
-        )
+    while True:
         for x in regex:
             if x not in ("l", "u", "n", "s"):
                 char_list.append(x)
+        if len(char_list) == 0:
+            break
+        print(
+            "\nYour expression is not valid. The invalid characters are:\n\n - "
+            f"{"\n - ".join(char_list)}\n"
+        )
+        char_list = []
+        regex = (
+            input("Please try to input another expression: ").lower().replace(" ", "")
+        )
+        
     return regex
 
 
@@ -204,6 +204,8 @@ def main(args):
 
         if save_confirm == "y":
             is_saved = store_pass(args, pass_list)
+        else:
+            is_saved = False
 
         # Only asks to encrypt is passwords were saved
         if is_saved == True:
