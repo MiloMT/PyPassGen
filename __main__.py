@@ -119,7 +119,15 @@ def encrypt_pass(args: object, pass_list: list) -> None:
 
 
 def retrieve_pass(args):
-    print("Viewing passwords instead")
+    if os.path.isfile("passwords.txt"):
+        print("Passwords in passwords.txt:")
+        print("--------------------------------------------------")
+        with open("passwords.txt", "r") as f:
+            for line in f:
+                print(line, end="")
+        print("\n--------------------------------------------------")
+    else:
+        print("There is no password.txt file in the current directory.")
 
 
 def regex_gen() -> string:
@@ -181,15 +189,6 @@ if __name__ == "__main__":
         type=int,
         help="Optionally create a number of passwords. (default: 1)",
     )
-    parser.add_argument(
-        "regex",
-        metavar="Regular_Expression",
-        nargs="?",
-        default=False,
-        type=str,
-        help="Optionally create a regular expression for password generation."
-        " (default: False)",
-    )
 
     # List of options
     parser.add_argument(
@@ -211,6 +210,13 @@ if __name__ == "__main__":
         action="store_true",
     )
     parser.add_argument(
+        "-r",
+        "--regex",
+        help="Lets the generator know that you want to create a"
+        " regular expression",
+        action="store_true",
+    )
+    parser.add_argument(
         "-s",
         "--special",
         help="Adds special characters to password generation",
@@ -224,7 +230,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--view",
-        help="Instead of generating passwords, prints out encrypted passwords to terminal",
+        help="Instead of generating passwords, prints out passwords to terminal",
         action="store_true",
     )
 
