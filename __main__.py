@@ -41,9 +41,9 @@ def arg_check(
 
 
 def pass_gen(args: object, regex: string = None) -> list:
-    password = ""
-    pass_list = []
-    char_list = [string.ascii_lowercase]
+    password: str = ""
+    pass_list: list = []
+    char_list: list = [string.ascii_lowercase]
 
     # Flags to check for password character types.
     if args.upper:
@@ -56,7 +56,7 @@ def pass_gen(args: object, regex: string = None) -> list:
     if regex != None:
         # Number of password to generate.
         for _ in range(args.pass_num):
-            # Password generator dependent on regex.
+            # Password generator dependent on expression.
             for x in regex:
                 match x:
                     case "l":
@@ -84,6 +84,7 @@ def pass_gen(args: object, regex: string = None) -> list:
     if args.copy:
         pyperclip.copy("\n".join(pass_list))
 
+    # Formatted password printing
     print("--------------------------------------------------")
     print("\n".join(pass_list))
     print("--------------------------------------------------")
@@ -91,7 +92,7 @@ def pass_gen(args: object, regex: string = None) -> list:
     return pass_list
 
 
-def store_pass(args: object, pass_list: list) -> bool:
+def store_pass(args: object, pass_list: list) -> None:
     # Check if passwords.txt already exists in current directory.
     if os.path.isfile("passwords.txt") == True:
         # If it does, ask whether to overwrite or append passwords.
@@ -101,7 +102,7 @@ def store_pass(args: object, pass_list: list) -> bool:
             "this file? [W] or [A]: "
         )
         write_type = arg_check(write_type, "w", "overwrite", "a", "append")
-        # Ask user to confirm overwrite as long as ignore option wasn't used.
+        # Ask user to confirm overwrite as long as force option wasn't used.
         if write_type == "w" and args.force == False:
             overwrite_confirm = (
                 input(
@@ -116,15 +117,13 @@ def store_pass(args: object, pass_list: list) -> bool:
         # Checks if force flag used or if user has confirmed overwrite.
         if write_type == "a" or args.force == True or overwrite_confirm == "y":
             with open("passwords.txt", write_type) as f:
+                # Add extra line to list if appending
                 if write_type == "a":
                     f.write("\n")
                 f.write("\n".join(pass_list))
-            # Bool value for whether passwords were saved or not
-            return True
         else:
-            print("Save aborted")
-            # Bool value for whether passwords were saved or not
-            return False
+            # Rerun save function if confirmation is denied
+            store_pass(args, pass_list)
     else:
         # If passwords.text doesn't exist, automatically create file.
         with open("passwords.txt", "w") as f:
@@ -133,57 +132,70 @@ def store_pass(args: object, pass_list: list) -> bool:
             "Your passwords have been saved in the 'passwords.txt'",
             "file in the current directory",
         )
-        # Bool value for whether passwords were saved or not
-        return True
 
 
 def encrypt_pass(args: object, pass_list: list) -> None:
+    # Check whether there is already an active key present
     if os.path.isfile("key.txt") == True:
         with open("key.txt", "r") as f:
             key = f.read()
+
     else:
+        # Generate a key and save it if none available
         key = Fernet.generate_key()
         with open("key.txt", "wb") as f:
             f.write(key)
+
         print(
             "A new key has been created in the current directory as 'key.txt'."
             " Keep this safe!"
         )
+    # Create fernet object from key from cryptography library
     fernet = Fernet(key)
+    # Take passwords from current file, this means that if there is
+    # already a password list, it can encrypt pre-existing files
     with open("passwords.txt", "r+") as f:
         data = f.read()
-    
+    # Encrypt password list into a byte object for encryption
     with open("passwords.txt", "wb") as f:
         token = fernet.encrypt(data.encode("utf-8"))
         f.write(token)
-    
-    # test_list = fernet.decrypt(token).decode("utf-8").split("\n")
-    # print(test_list)
 
-def retrieve_pass(args):
+
+def retrieve_pass() -> None:
     if os.path.isfile("passwords.txt"):
         # Checks if encryption has been used
         if os.path.isfile("key.txt"):
             with open("key.txt", "r") as f:
                 key = f.read()
-            fernet = Fernet(key)
+
             with open("passwords.txt", "r") as f:
                 token = f.read()
-                pass_list = fernet.decrypt(token).decode("utf-8").split("\n")
+
+            # Generates fernet object form existing key and
+            # decrypts passwords file
+            fernet = Fernet(key)
+            pass_list = fernet.decrypt(token).decode("utf-8").split("\n")
         else:
+            # Otherwise if no key.txt file exists, read passwords as per normal
             with open("passwords.txt", "r") as f:
                 data = f.read()
                 pass_list = data.split("\n")
+
+        # Formatted password display
         print("Passwords in passwords.txt:")
         print("--------------------------------------------------")
         for password in pass_list:
             print(password)
         print("--------------------------------------------------")
+
     else:
         print("There is no password.txt file in the current directory.")
 
 
-def regex_gen() -> string:
+def expression_gen() -> string:
+    invalid_chars: list = []
+
     print(
         "You've selected to create an expression to use for password generation.\n"
         "A password expression is created by using a sequence of characters in a\n"
@@ -191,38 +203,46 @@ def regex_gen() -> string:
         " - [U] uppercase letter\n - [N] digit\n - [S] special character\n\n"
         "Please refer to the help guide for expression examples.\n"
     )
-    regex = input("Please input a compatible expression: ").lower().replace(" ", "")
-    char_list = []
+    expression = (
+        input("Please input a compatible expression: ").lower().replace(" ", "")
+    )
+
     while True:
-        for x in regex:
+        # Checks for if any characters in expression are invalid.
+        for x in expression:
             if x not in ("l", "u", "n", "s"):
-                char_list.append(x)
-        if len(char_list) == 0:
+                invalid_chars.append(x)
+        # Breaks out of check if no invalid characters
+        if len(invalid_chars) == 0:
             break
+        # Lets user know which characters are invalid
         print(
             "\nYour expression is not valid. The invalid characters are:\n\n - "
-            f"{"\n - ".join(char_list)}\n"
+            f"{"\n - ".join(invalid_chars)}\n"
         )
-        char_list = []
-        regex = (
+        invalid_chars = []
+        expression = (
             input("Please try to input another expression: ").lower().replace(" ", "")
         )
 
-    return regex
+    return expression
 
 
 def main(args):
+    # If view mode, ignore generator
     if args.view:
         retrieve_pass(args)
     else:
-        if args.regex:
-            regex = regex_gen()
+        # Check if expression generation used first to pass expression
+        if args.expression:
+            expression = expression_gen()
             print("\nPasswords Generated:")
-            pass_list = pass_gen(args, regex)
+            pass_list = pass_gen(args, expression)
         else:
             print("Passwords Generated:")
             pass_list = pass_gen(args)
 
+        # Prompts user to check if they want to save.
         save_confirm = (
             input("Would you like to save your generated passwords? [Y] or [N]: ")
             .lower()
@@ -231,12 +251,8 @@ def main(args):
         save_confirm = arg_check(save_confirm, "y", "yes", "n", "no")
 
         if save_confirm == "y":
-            is_saved = store_pass(args, pass_list)
-        else:
-            is_saved = False
-
-        # Only asks to encrypt is passwords were saved
-        if is_saved == True:
+            store_pass(args, pass_list)
+            # Checks for encryption if user has prompted to save
             encrypt_confirm = (
                 input("Would you like to encrypt your saved passwords? [Y] or [N]: ")
                 .lower()
@@ -281,6 +297,13 @@ if __name__ == "__main__":
         action="store_true",
     )
     parser.add_argument(
+        "-e",
+        "--expression",
+        help="Lets the generator know that you want to create an"
+        " expression to control the password generation",
+        action="store_true",
+    )
+    parser.add_argument(
         "-f",
         "--force",
         help="Forces overwrite so app ignores overwrite confirmation",
@@ -290,13 +313,6 @@ if __name__ == "__main__":
         "-n",
         "--number",
         help="Adds numbers to password generation",
-        action="store_true",
-    )
-    parser.add_argument(
-        "-r",
-        "--regex",
-        help="Lets the generator know that you want to create an"
-        " expression to control the password generation",
         action="store_true",
     )
     parser.add_argument(
