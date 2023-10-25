@@ -56,7 +56,7 @@ def pass_gen(args: object, regex: string = None) -> list:
     if regex != None:
         # Number of password to generate.
         for _ in range(args.pass_num):
-            # Password generator dependent on char_num and arg flags.
+            # Password generator dependent on regex.
             for x in regex:
                 match x:
                     case "l":
