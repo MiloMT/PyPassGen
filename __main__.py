@@ -18,105 +18,160 @@ import sys
 import string
 import argparse
 import pyperclip
+import os
+
 # import re
 # import cryptography
 
-def seperator(func):
-    
-    def wrapper(*args):
-        print("--------------------------------------------------")
-        func(*args)
-        
-    return wrapper
-
-@seperator
 def pass_gen(args):
-    
     password = ""
     pass_list = []
     char_list = [string.ascii_lowercase]
-    
+
     # Flags to check for password character types
-    if args.upper: char_list.append(string.ascii_uppercase)
-    if args.number: char_list.append(string.digits)
-    if args.special: char_list.append(string.punctuation)
-    
+    if args.upper:
+        char_list.append(string.ascii_uppercase)
+    if args.number:
+        char_list.append(string.digits)
+    if args.special:
+        char_list.append(string.punctuation)
+
     # Number of password to generate
-    for _ in range(args.pass_num):  
+    for _ in range(args.pass_num):
         # Password generator dependent on char_num and arg flags
         for _ in range(int(args.char_num)):
             password += random.choice(random.choice(char_list))
-        
+
         pass_list.append(password)
         password = ""
-    
+
     # Copy passwords if flag entered
-    if args.copy: pyperclip.copy("\n".join(pass_list))
-    
+    if args.copy:
+        pyperclip.copy("\n".join(pass_list))
+
+    print("--------------------------------------------------")
     print("\n".join(pass_list))
-    
-    store_pass()
+    print("--------------------------------------------------")
 
-@seperator
-def store_pass():
-    # To do
-    if args.save:
-        # Check if passwords.txt already exists in current directory
+    return pass_list
+
+
+def store_pass(pass_list):
+    # Check if passwords.txt already exists in current directory
+    if os.path.isfile("passwords.txt") == True:
         # If it does, ask whether to overwrite or append passwords
+        print("There is already a passwords file in the current directory.")
+        write_confirm = input("Would you like to overwrite the file or append to this file? [W] or [A]: ")
+        while write_confirm not in ("w", "a"):
+            write_confirm = input(
+                "Sorry, but that wasn't a valid input. Please enter a [W] for overwrite or [A] for append: "
+            ).lower()
+        with open("passwords.txt", write_confirm) as f:
+            if write_confirm == "a":
+                f.write("\n")
+            f.write("\n".join(pass_list))
+    else:
         # If not, say that file created
-        confirmation = input("Placeholder")
-        encrypt_pass()
+        print("This file doesn't exist")
+        print(pass_list)
+        with open("passwords.txt", "w") as f:
+            f.write("\n".join(pass_list))
 
-@seperator
+    confirmation = input("Placeholder")
+    encrypt_pass()
+
+
 def encrypt_pass():
     # Ask whether to encrypt password txt file
     print("Testing")
     pass
 
-@seperator
+
 def retrieve_pass():
     # To do
     pass
 
-def main():
-    # To do
-    pass
 
-# Instantiate argparse
-parser = argparse.ArgumentParser(
-    description="Generates a password or series of passwords given a "
-    "set of parameters"
-    )
+def main(args):
+    print("Passwords Generated:")
+    pass_list = pass_gen(args)
+    save_confirm = input(
+        "Would you like to save your generated passwords? [Y] or [N]: "
+    ).lower()
 
-# List of positional arguments
-parser.add_argument("char_num", metavar="Num_of_Chars",  
-                    type=int, help="Number of characters in password.")
-parser.add_argument("pass_num", metavar="Num_of_Passwords", 
-                    nargs="?", default=1, type=int, 
-                    help="Optionally create a number of passwords. (default: 1)")
-parser.add_argument("regex", metavar="Regular_Expression", nargs="?", 
-                    default=None, type=str, help="Optionally create a regular "
-                    "expression for password generation.")
+    if save_confirm == "y":
+        store_pass(pass_list)
+    else:
+        while save_confirm not in ("y", "n"):
+            save_confirm = input(
+                "Sorry, but that wasn't a valid input. Please enter a [Y] for yes or [N] for no: "
+            ).lower()
 
-# List of options
-parser.add_argument("-c", "--copy", help="Copies the password to the "
-                    "clipboard once generated", action="store_true")
-parser.add_argument("-H", "--hide", help="Stops the password from printing "
-                    "to CLI", action="store_true")
-parser.add_argument("-n", "--number", help="Adds numbers to password generation",
-                    action="store_true")
-parser.add_argument("-s", "--special", help="Adds special characters to "
-                    "password generation", action="store_true")
-parser.add_argument("--save", help="Saves password/s in a txt file in CWD "
-                    "called 'passwords.txt'", action="store_true")
-parser.add_argument("-u", "--upper", help="Adds uppercase letters to "
-                    "password generation", action="store_true")
-
-# Parse the passed arguments
-args = parser.parse_args()
-
-print("\nPasswords Generated:")
-pass_gen(args)
 
 if __name__ == "__main__":
-    main()
+    # Instantiate argparse
+    parser = argparse.ArgumentParser(
+        description="Generates a password or series of passwords given a "
+        "set of parameters"
+    )
+
+    # List of positional arguments
+    parser.add_argument(
+        "char_num",
+        metavar="Num_of_Chars",
+        type=int,
+        help="Number of characters in password.",
+    )
+    parser.add_argument(
+        "pass_num",
+        metavar="Num_of_Passwords",
+        nargs="?",
+        default=1,
+        type=int,
+        help="Optionally create a number of passwords. (default: 1)",
+    )
+    parser.add_argument(
+        "regex",
+        metavar="Regular_Expression",
+        nargs="?",
+        default=None,
+        type=str,
+        help="Optionally create a regular " "expression for password generation.",
+    )
+
+    # List of options
+    parser.add_argument(
+        "-c",
+        "--copy",
+        help="Copies the password to the " "clipboard once generated",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-H",
+        "--hide",
+        help="Stops the password from printing " "to CLI",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-n",
+        "--number",
+        help="Adds numbers to password generation",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-s",
+        "--special",
+        help="Adds special characters to " "password generation",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-u",
+        "--upper",
+        help="Adds uppercase letters to " "password generation",
+        action="store_true",
+    )
+
+    # Parse the passed arguments
+    args = parser.parse_args()
+
+    main(args)
