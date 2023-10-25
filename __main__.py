@@ -20,7 +20,7 @@ import argparse
 import pyperclip
 import os
 
-# import cryptography
+from cryptography.fernet import Fernet
 
 
 def arg_check(
@@ -138,13 +138,34 @@ def store_pass(args: object, pass_list: list) -> bool:
 
 
 def encrypt_pass(args: object, pass_list: list) -> None:
-    # Ask whether to encrypt password txt file
-    print("Testing")
-    pass
-
+    if os.path.isfile("key.txt") == True:
+        with open("key.txt", "r") as f:
+            key = f.read()
+    else:
+        key = Fernet.generate_key()
+        with open("key.txt", "wb") as f:
+            f.write(key)
+        print(
+            "A new key has been created in the current directory as 'key.txt'."
+            " Keep this safe!"
+        )
+    fernet = Fernet(key)
+    with open("passwords.txt", "r+") as f:
+        data = f.read()
+    
+    with open("passwords.txt", "wb") as f:
+        token = fernet.encrypt(data.encode("utf-8"))
+        f.write(token)
+    
+    test_list = fernet.decrypt(token).decode("utf-8").split("\n")
+    print(test_list)
 
 def retrieve_pass(args):
     if os.path.isfile("passwords.txt"):
+        # Decrypting file is key exists.
+        # if os.path.isfile("key.txt"):
+        #     with open("key.txt", "r") as file:
+        #         fernet = Fernet(file.read())
         print("Passwords in passwords.txt:")
         print("--------------------------------------------------")
         with open("passwords.txt", "r") as f:
@@ -179,7 +200,7 @@ def regex_gen() -> string:
         regex = (
             input("Please try to input another expression: ").lower().replace(" ", "")
         )
-        
+
     return regex
 
 
