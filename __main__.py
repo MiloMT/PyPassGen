@@ -245,7 +245,7 @@ def retrieve_pass() -> None:
             with open("passwords.txt", "r") as f:
                 token = f.read()
 
-            # Generates fernet object form existing key and
+            # Generates fernet object from existing key and
             # decrypts passwords file
             fernet = Fernet(key)
             pass_list = fernet.decrypt(token).decode("utf-8").split("\n")
