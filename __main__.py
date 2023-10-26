@@ -256,7 +256,6 @@ def retrieve_pass() -> None:
             # Otherwise if no key.txt file exists, read passwords as per normal
             with open("passwords.txt", "r", encoding="UTF-8") as f:
                 data = f.read()
-                print(type(data))
                 pass_list = data.split("\n")
 
         # If copy flag used, copies pass_list from file
