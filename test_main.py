@@ -119,6 +119,12 @@ def test_encrypt_pass(capfd):
     # Ensure a key was created.
     assert os.path.isfile("key.txt")
     
+    with open("passwords.txt", "r") as f:
+        data = f.read()
+        
+    # Ensure passwords.txt has been encrypted
+    assert data != "Test Password"
+    
     # Need to generate argparse object
     parser = argparse.ArgumentParser()
     args = parser.parse_args()
