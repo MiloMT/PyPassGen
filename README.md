@@ -56,15 +56,70 @@ The program can also be used to view or copy passwords from existing 'passwords.
 
 A github project was created to manage the implementation plan and track key tasks throughout the development of this application. The project can be found at this link: https://github.com/users/MiloMT/projects/1.
 
-This project was updated consistently throughout the project to manage the variety of tasks associated with the application. 
+This project was updated consistently throughout development to manage the variety of tasks associated with the application. 
+
+*Table Initialization: Part 1*
+![Table_231018_Part1](https://github.com/MiloMT/PyPassGen/assets/60989510/2a4de3d2-691c-45b2-b1ed-a138a9c380c4)
+*Table Initialization: Part 2*
+![Table_231018_Part2](https://github.com/MiloMT/PyPassGen/assets/60989510/acc0fd65-9338-4e37-8e62-03a2e088a4b1)
+*Midway through Password Generation*
+![Table_231019_MidPassGen](https://github.com/MiloMT/PyPassGen/assets/60989510/efbf68c0-78cd-4380-807a-438d092cda0c)
+*End of Password Generation*
+![Table_231019_EndPassGen](https://github.com/MiloMT/PyPassGen/assets/60989510/dc0b6999-ee8b-42c8-8b68-7ed52dff1339)
+*Inclusion of extra project fields for docs / scripts*
+![Table_231025_ExtraFields](https://github.com/MiloMT/PyPassGen/assets/60989510/2c30ba92-5c6d-41fe-a9cf-f545aaccb1ac)
+*Updates dependent on task status*
+![Table_231025_SaveDescriptions](https://github.com/MiloMT/PyPassGen/assets/60989510/1888f3b6-4d70-4bba-87c7-70b4b4f4762f)
+*Getting through password generation*
+![Table_231025_PassGenNoEncrypt](https://github.com/MiloMT/PyPassGen/assets/60989510/073cd53f-68f2-4746-8ec9-bfa84ad55f5d)
+*Nearly finished expression generation*
+![Table_231025_ExpressionDoneExcDocs](https://github.com/MiloMT/PyPassGen/assets/60989510/8bcbd252-e59f-43a8-9f55-499ae24280af)
+*Getting through encryption functionality with checklist and comments*
+![Table_231025_PassStoreEncryptAdded](https://github.com/MiloMT/PyPassGen/assets/60989510/535cffc6-485a-4357-a9c1-f5270e18ed1f)
+*Starting on documentation*
+![Table_231026_DocStart](https://github.com/MiloMT/PyPassGen/assets/60989510/7b943b12-8bbf-4635-aa47-e0ddc6049821)
+*Extra bash scripts added as required*
+![Table_231026_ExtraScriptAdd](https://github.com/MiloMT/PyPassGen/assets/60989510/80516c6c-36b0-4e4e-ad08-9c796352f167)
+*Managing Issues through Github Interface*
+![Table_231026_GithubIssueManagement](https://github.com/MiloMT/PyPassGen/assets/60989510/6c516490-f476-415b-b20a-16d46e3167e2)
 
 ## Installation Instructions
 
+All used packages are compatible with all major operating systems (Windows, MacOS, Linux), so this application can be used across any of these OS's. There are multiple scripts contained within the 'script' folder that can be used for installation and basic use cases of the application (windows specific), or the application can be run directly via the command line. Please note that in order to run the application, you must have Python >= 3.7 version installed for the cryptography library.
 
+#### Hardware / Software Requirements
+
+The only base requirement for running the application is having Python version >= 3.7 installed on the computer. You can download and install the latest python installation directly through the Python homepage: https://www.python.org/
+
+As for hardware requirements, you need to ensure that your system has the minimum OS versions as below:
+
+- Windows: Windows Vista or newer
+- MacOS: MaxOS X 10.9 or newer
+- Linux: Dependent on linux distribution, please view the official Python documentation related to your Python version.
+
+#### Scripts
+
+There are two different installation scripts. One that installs the application dependencies within a virtual environment. And than one that installs the dependencies within the base Python installation. Once the installation scripts have been run, than there are three variations of example use cases that can be run depending on the installed environment. One for a basic password generation, one to prompt for password creation, and than lastly one to view existing passwords. Once run, please follow the prompts as required in the terminal interface.
 
 ## Command Line Arguments
 
+usage: __main__.py [-h] [-c] [-e] [-f] [-n] [-s] [-u] [--view] [Num_of_Chars] [Num_of_Passwords]  
 
+Generates a password or series of passwords given a set of parameters  
+
+##### positional arguments:  
+  Num_of_Chars      Optionally enter a number of characters in password. (default: 10)  
+  Num_of_Passwords  Optionally create a number of passwords. (default: 1)  
+
+##### options:  
+  -h, --help        : show this help message and exit  
+  -c, --copy        : Copies the password to the clipboard once generated or viewed  
+  -e, --expression  : Lets the generator know that you want to create an expression to control the password generation  
+  -f, --force       : Forces overwrite so app ignores overwrite confirmation  
+  -n, --number      : Adds numbers to password generation  
+  -s, --special     : Adds special characters to password generation  
+  -u, --upper       : Adds uppercase letters to password generation  
+  --view            : Instead of generating passwords, prints out passwords to terminal  
 
 ## References
 
