@@ -50,10 +50,6 @@ def arg_check(
         If variable is cleared, returns unchanged, otherwise will
         repeatedly ask for user input until inputted argument
         matches expected argument.
-
-    Raises:
-        ValueError: An error if value isn't as expected. Note: Not yet
-        implemented.
     """
 
     while var not in (arg1, arg2):
@@ -237,6 +233,9 @@ def retrieve_pass(arguments: object) -> None:
     Also checks whether a key exists for encrypted passwords, and
     if so, will decrypt the password prior to printing out. Also
     has the ability to copy the passwords from an existing file.
+    
+    Args:
+        arguments: Object containing parsed CLI arguments.
     """
 
     if os.path.isfile("passwords.txt"):
@@ -283,10 +282,6 @@ def expression_gen() -> string:
 
     Returns:
         An error checked expression to be used for password generation.
-
-    Raises:
-        ValueError: An error if one of the chars isn't expected. Note: Not
-        yet implemented.
     """
 
     invalid_chars: list = []
