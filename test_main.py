@@ -134,5 +134,3 @@ def test_encrypt_pass(capfd):
     # Clear out test files
     os.remove("passwords.txt")
     os.remove("key.txt")
-    
-    
