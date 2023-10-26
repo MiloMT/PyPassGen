@@ -77,7 +77,7 @@ def pass_gen(arguments: object, expression: string = None) -> list:
     any provided). Flags are passed and checked.
 
     Args:
-        args: Object containing parsed CLI arguments.
+        arguments: Object containing parsed CLI arguments.
         expression: An user created expression that dictates
             how a password is generated.
 
@@ -145,7 +145,7 @@ def store_pass(arguments: object, pass_list: list) -> None:
     append passwords if the file already exists.
 
     Args:
-        args: Object containing parsed CLI arguments.
+        arguments: Object containing parsed CLI arguments.
         pass_list: List of generated passwords.
     """
 
@@ -162,8 +162,9 @@ def store_pass(arguments: object, pass_list: list) -> None:
         if write_type == "w" and not arguments.force:
             overwrite_confirm = (
                 input(
-                    "This will overwrite your existing"
-                    " password file, are you sure? [Y] or [N]: "
+                    "This will overwrite your existing password file "
+                    "resulting in the current passwords being lost, "
+                    "are you sure? [Y] or [N]: "
                 )
                 .lower()
                 .strip()
@@ -250,11 +251,12 @@ def retrieve_pass() -> None:
             # Generates fernet object from existing key and
             # decrypts passwords file
             fernet = Fernet(key)
-            pass_list = fernet.decrypt(token).decode("utf-8").split("\n")
+            pass_list = fernet.decrypt(token).decode("UTF-8").split("\n")
         else:
             # Otherwise if no key.txt file exists, read passwords as per normal
             with open("passwords.txt", "r", encoding="UTF-8") as f:
                 data = f.read()
+                print(type(data))
                 pass_list = data.split("\n")
 
         # If copy flag used, copies pass_list from file
@@ -293,9 +295,9 @@ def expression_gen() -> string:
     print(
         "You've selected to create an expression to use for password "
         "generation.\nA password expression is created by using a sequence of "
-        "characters in a\n designated order. The characters to use are below:"
+        "characters in a\ndesignated order. The characters to use are below:"
         "\n\n - [L] lowercase letter\n - [U] uppercase letter\n - [N] digit\n -"
-        " [S] special character\n\n Please refer to the help guide for "
+        " [S] special character\n\nPlease refer to the github repo for "
         "expression examples.\n"
     )
     expression = (
@@ -336,7 +338,7 @@ def main(arguments):
     and than encrypt passwords to the local directory.
 
     Args:
-        args: Object containing parsed CLI arguments.
+        arguments: Object containing parsed CLI arguments.
     """
 
     # If view mode, ignore generator
