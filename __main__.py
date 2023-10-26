@@ -27,26 +27,30 @@ from cryptography.fernet import Fernet
 
 
 def arg_check(
-    var: string, arg1: string, arg1_desc: string, arg2: string, arg2_desc: string
+    var: string,
+    arg1: string,
+    arg1_desc: string,
+    arg2: string,
+    arg2_desc: string,
 ) -> string:
     """Error checking when receiving user input arguments.
-    
+
     Retrieves multiple arguments depending on input check required
     and prints relevant output message if input isn't as expected.
     Provides user with relevant descriptors for getting new input.
-    
+
     Args:
         var: The variable to check expected results against.
         arg1: First option as a single character.
         arg1_desc: Extended version of the first character.
         arg2: Second option as a single character.
         arg2_desc: Extended version of the second character.
-    
+
     Returns:
         If variable is cleared, returns unchanged, otherwise will
         repeatedly ask for user input until inputted argument
         matches expected argument.
-        
+
     Raises:
         ValueError: An error if value isn't as expected. Note: Not yet
         implemented.
@@ -68,15 +72,15 @@ def arg_check(
 
 def pass_gen(arguments: object, expression: string = None) -> list:
     """Password generator function.
-    
+
     Generates password based on flags and expression (if
     any provided). Flags are passed and checked.
-    
+
     Args:
         args: Object containing parsed CLI arguments.
         expression: An user created expression that dictates
             how a password is generated.
-    
+
     Returns:
         A list of generated passwords.
     """
@@ -134,12 +138,12 @@ def pass_gen(arguments: object, expression: string = None) -> list:
 
 def store_pass(arguments: object, pass_list: list) -> None:
     """Password storage in text files.
-    
+
     Receives a list of passwords and than proceeds to write
     those passwords to a file called 'passwords.txt' within
     the current directory. User can choose to overwrite or
     append passwords if the file already exists.
-    
+
     Args:
         args: Object containing parsed CLI arguments.
         pass_list: List of generated passwords.
@@ -164,11 +168,13 @@ def store_pass(arguments: object, pass_list: list) -> None:
                 .lower()
                 .strip()
             )
-            overwrite_confirm = arg_check(overwrite_confirm, "y", "yes", "n", "no")
+            overwrite_confirm = arg_check(
+                overwrite_confirm, "y", "yes", "n", "no"
+            )
 
         # Checks if force flag used or if user has confirmed overwrite.
         if write_type == "a" or arguments.force or overwrite_confirm == "y":
-            with open("passwords.txt", write_type, encoding='UTF-8') as f:
+            with open("passwords.txt", write_type, encoding="UTF-8") as f:
                 # Add extra line to list if appending
                 if write_type == "a":
                     f.write("\n")
@@ -178,7 +184,7 @@ def store_pass(arguments: object, pass_list: list) -> None:
             store_pass(arguments, pass_list)
     else:
         # If passwords.text doesn't exist, automatically create file.
-        with open("passwords.txt", "w", encoding='UTF-8') as f:
+        with open("passwords.txt", "w", encoding="UTF-8") as f:
             f.write("\n".join(pass_list))
         print(
             "Your passwords have been saved in the 'passwords.txt'",
@@ -188,7 +194,7 @@ def store_pass(arguments: object, pass_list: list) -> None:
 
 def encrypt_pass() -> None:
     """Encrypting stored passwords.
-    
+
     Encrypts passwords stored in 'passwords.txt' based off either
     new or existing key. If a new key is generated, the key is
     stored in a file called 'key.txt' in the current directory. If
@@ -198,7 +204,7 @@ def encrypt_pass() -> None:
 
     # Check whether there is already an active key present
     if os.path.isfile("key.txt"):
-        with open("key.txt", "r", encoding='UTF-8') as f:
+        with open("key.txt", "r", encoding="UTF-8") as f:
             key = f.read()
 
     else:
@@ -215,7 +221,7 @@ def encrypt_pass() -> None:
     fernet = Fernet(key)
     # Take passwords from current file, this means that if there is
     # already a password list, it can encrypt pre-existing files
-    with open("passwords.txt", "r+", encoding='UTF-8') as f:
+    with open("passwords.txt", "r+", encoding="UTF-8") as f:
         data = f.read()
     # Encrypt password list into a byte object for encryption
     with open("passwords.txt", "wb") as f:
@@ -225,7 +231,7 @@ def encrypt_pass() -> None:
 
 def retrieve_pass() -> None:
     """Retrieving passwords and printing on screen.
-    
+
     Retrieves passwords from 'passwords.txt' file if it exists.
     Also checks whether a key exists for encrypted passwords, and
     if so, will decrypt the password prior to printing out. Also
@@ -235,10 +241,10 @@ def retrieve_pass() -> None:
     if os.path.isfile("passwords.txt"):
         # Checks if encryption has been used
         if os.path.isfile("key.txt"):
-            with open("key.txt", "r", encoding='UTF-8') as f:
+            with open("key.txt", "r", encoding="UTF-8") as f:
                 key = f.read()
 
-            with open("passwords.txt", "r", encoding='UTF-8') as f:
+            with open("passwords.txt", "r", encoding="UTF-8") as f:
                 token = f.read()
 
             # Generates fernet object from existing key and
@@ -247,7 +253,7 @@ def retrieve_pass() -> None:
             pass_list = fernet.decrypt(token).decode("utf-8").split("\n")
         else:
             # Otherwise if no key.txt file exists, read passwords as per normal
-            with open("passwords.txt", "r", encoding='UTF-8') as f:
+            with open("passwords.txt", "r", encoding="UTF-8") as f:
                 data = f.read()
                 pass_list = data.split("\n")
 
@@ -268,28 +274,29 @@ def retrieve_pass() -> None:
 
 def expression_gen() -> string:
     """Generates an expression to be used to dictate password generation.
-    
+
     Provides a list of instructions to the user to assist in generating
     a user defined expression for password generation. Provided with
     a list of characters, the user can create a non-determined password
     length as dictated by the letters used.
-    
+
     Returns:
         An error checked expression to be used for password generation.
-        
+
     Raises:
-        ValueError: An error if one of the chars isn't expected. Note: Not 
+        ValueError: An error if one of the chars isn't expected. Note: Not
         yet implemented.
     """
 
     invalid_chars: list = []
 
     print(
-        "You've selected to create an expression to use for password generation.\n"
-        "A password expression is created by using a sequence of characters in a\n"
-        "designated order. The characters to use are below:\n\n - [L] lowercase letter\n"
-        " - [U] uppercase letter\n - [N] digit\n - [S] special character\n\n"
-        "Please refer to the help guide for expression examples.\n"
+        "You've selected to create an expression to use for password "
+        "generation.\nA password expression is created by using a sequence of "
+        "characters in a\n designated order. The characters to use are below:"
+        "\n\n - [L] lowercase letter\n - [U] uppercase letter\n - [N] digit\n -"
+        " [S] special character\n\n Please refer to the help guide for "
+        "expression examples.\n"
     )
     expression = (
         input("Please input a compatible expression: ").lower().replace(" ", "")
@@ -310,7 +317,9 @@ def expression_gen() -> string:
         )
         invalid_chars = []
         expression = (
-            input("Please try to input another expression: ").lower().replace(" ", "")
+            input("Please try to input another expression: ")
+            .lower()
+            .replace(" ", "")
         )
 
     return expression
@@ -318,14 +327,14 @@ def expression_gen() -> string:
 
 def main(arguments):
     """PyPassGen main functionality.
-    
+
     If this is the main module, runs the standard PyPassGen functionality.
     Checks flags and runs appropriately. If view mode selected, than
     will ignore all generation capability. Otherwise, will check whether
     the expression functionality was chosen first, than will generate
     password depending on result, lastly will check if user wants to save
     and than encrypt passwords to the local directory.
-    
+
     Args:
         args: Object containing parsed CLI arguments.
     """
@@ -345,7 +354,9 @@ def main(arguments):
 
         # Prompts user to check if they want to save.
         save_confirm = (
-            input("Would you like to save your generated passwords? [Y] or [N]: ")
+            input(
+                "Would you like to save your generated passwords? [Y] or [N]: "
+            )
             .lower()
             .strip()
         )
@@ -355,7 +366,10 @@ def main(arguments):
             store_pass(arguments, pass_list)
             # Checks for encryption if user has prompted to save
             encrypt_confirm = (
-                input("Would you like to encrypt your saved passwords? [Y] or [N]: ")
+                input(
+                    "Would you like to encrypt your saved passwords?"
+                    "[Y] or [N]: "
+                )
                 .lower()
                 .strip()
             )
