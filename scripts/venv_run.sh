@@ -32,26 +32,26 @@ then
         if [[ $1 == "std" ]]
         then
             # Standard run executes app with 10 chars and 5 passwords.
-            python3 ../__main__.py 10 5
+            python3 ../main.py 10 5
             deactivate
             exit 0
         elif [[ $1 == "view" ]]
         then
             # View run executes the app in view mode
-            python3 ../__main__.py --view
+            python3 ../main.py --view
             deactivate
             exit 0
         elif [[ $1 == "exp" ]]
         then
             # Expression run executes the app in expression mode while 
             # generating 5 passwords of length 10 characters
-            python3 ../__main__.py 10 5 -e
+            python3 ../main.py 10 5 -e
             deactivate
             exit 0
         elif [[ $# -eq 0 ]]
         then
             # Standard run if no bash script arguments passed.
-            python3 ../__main__.py 10 5
+            python3 ../main.py 10 5
             deactivate
             exit 0
         elif ! [[ ${arg_array[*]} =~ $1 ]]
