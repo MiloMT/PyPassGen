@@ -7,7 +7,7 @@ if ! [[ -x "$(command -v python)" ]]
 then
     echo "Error:
 This program runs on Python, but it looks like Python is not installed.
-To install python, check out https://installpython3.com/" >&2
+To install python, check out https://www.python.org/" >&2
     exit 1
 fi
 
@@ -15,7 +15,7 @@ fi
 arg_array=("std" "view" "exp")
 
 # Break python version into array.
-long_pyversion=$(command python --version)
+long_pyversion=$(python --version)
 short_pyversion=${long_pyversion:7}
 IFS='.' read -r -a split_pyversion <<< "$short_pyversion"
 
@@ -28,23 +28,23 @@ then
         if [[ $1 == "std" ]]
         then
             # Standard run executes app with 10 chars and 5 passwords.
-            python ../__main__.py 10 5
+            python3 ../__main__.py 10 5
             exit 0
         elif [[ $1 == "view" ]]
         then
             # View run executes the app in view mode
-            python ../__main__.py --view
+            python3 ../__main__.py --view
             exit 0
         elif [[ $1 == "exp" ]]
         then
             # Expression run executes the app in expression mode while 
             # generating 5 passwords of length 10 characters
-            python ../__main__.py 10 5 -e
+            python3 ../__main__.py 10 5 -e
             exit 0
         elif [[ $# -eq 0 ]]
         then
             # Standard run if no bash script arguments passed.
-            python ../__main__.py 10 5
+            python3 ../__main__.py 10 5
             exit 0
         elif ! [[ ${arg_array[*]} =~ $1 ]]
         then
@@ -64,5 +64,5 @@ fi
 # Only runs if above python version checks fails.
 echo "Error:
 A minimum of Python 3.10 needs to be installed to run this application.
-To install python, check out https://installpython3.com/" >&2
+To install python, check out https://www.python.org/" >&2
 exit 1
