@@ -326,7 +326,7 @@ def expression_gen() -> string:
     return expression
 
 
-def main(arguments):
+def main(arguments: object) -> None:
     """PyPassGen main functionality.
 
     If this is the main module, runs the standard PyPassGen functionality.
