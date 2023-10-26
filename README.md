@@ -85,16 +85,16 @@ This project was updated consistently throughout development to manage the varie
 
 ## Installation Instructions
 
-All used packages are compatible with all major operating systems (Windows, MacOS, Linux), so this application can be used across any of these OS's. There are multiple scripts contained within the 'script' folder that can be used for installation and basic use cases of the application (windows specific), or the application can be run directly via the command line. Please note that in order to run the application, you must have Python >= 3.7 version installed for the cryptography library.
+All used packages are compatible with all major operating systems (Windows, MacOS, Linux), so this application can be used across any of these OS's. There are multiple scripts contained within the 'script' folder that can be used for installation and basic use cases of the application (windows specific), or the application can be run directly via the command line. Please note that in order to run the application, you must have Python >= 3.10 version installed for the cryptography library and the match case functionality used in the code.
 
 #### Hardware / Software Requirements
 
-The only base requirement for running the application is having Python version >= 3.7 installed on the computer. You can download and install the latest python installation directly through the Python homepage: https://www.python.org/
+The only base requirement for running the application is having Python version >= 3.10 installed on the computer. You can download and install the latest python installation directly through the Python homepage: https://www.python.org/
 
 As for hardware requirements, you need to ensure that your system has the minimum OS versions as below:
 
-- Windows: Windows Vista or newer
-- MacOS: MaxOS X 10.9 or newer
+- Windows: Windows 8.1 or newer
+- MacOS: MaxOS 10.9 or newer
 - Linux: Dependent on linux distribution, please view the official Python documentation related to your Python version.
 
 #### Scripts
