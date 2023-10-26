@@ -230,7 +230,7 @@ def encrypt_pass() -> None:
         f.write(token)
 
 
-def retrieve_pass() -> None:
+def retrieve_pass(arguments: object) -> None:
     """Retrieving passwords and printing on screen.
 
     Retrieves passwords from 'passwords.txt' file if it exists.
@@ -259,7 +259,7 @@ def retrieve_pass() -> None:
                 pass_list = data.split("\n")
 
         # If copy flag used, copies pass_list from file
-        if args.copy:
+        if arguments.copy:
             pyperclip.copy("\n".join(pass_list))
 
         # Formatted password display
@@ -342,7 +342,7 @@ def main(arguments: object) -> None:
 
     # If view mode, ignore generator
     if arguments.view:
-        retrieve_pass()
+        retrieve_pass(arguments)
     else:
         # Check if expression generation used first to pass expression
         if arguments.expression:

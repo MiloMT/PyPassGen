@@ -3,3 +3,5 @@ passwords.txt
 key.txt
 pylintrc
 pylintrc:Zone.Identifier
+__pycache__
+.pytest_cache
