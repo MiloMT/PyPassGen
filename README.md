@@ -94,6 +94,8 @@ This project was updated consistently throughout development to manage the varie
 ![Table_231026_PytestIssuesAdded](https://github.com/MiloMT/PyPassGen/assets/60989510/afa0d193-fd5e-44a2-a975-d6c34fa2273b)
 *Finalising all but documentation*
 ![Table_231026_OnlyDocumentationLeft](https://github.com/MiloMT/PyPassGen/assets/60989510/908e8974-1d78-44c3-aae2-66e292b09be5)
+*Final comments before first submission*
+![Table_231027_FirstSubmission](https://github.com/MiloMT/PyPassGen/assets/60989510/1e424051-77c1-418d-b486-d124c2c3b83f)
 
 ## Installation Instructions
 
