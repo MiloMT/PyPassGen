@@ -233,7 +233,7 @@ def retrieve_pass(arguments: object) -> None:
     Also checks whether a key exists for encrypted passwords, and
     if so, will decrypt the password prior to printing out. Also
     has the ability to copy the passwords from an existing file.
-    
+
     Args:
         arguments: Object containing parsed CLI arguments.
     """
@@ -307,9 +307,10 @@ def expression_gen() -> string:
         if len(invalid_chars) == 0:
             break
         # Lets user know which characters are invalid
+        invalid_char_format = "\n - ".join(invalid_chars)
         print(
             "\nYour expression is not valid. The invalid characters are:\n\n - "
-            f"{"\n - ".join(invalid_chars)}\n"
+            f"{invalid_char_format}\n"
         )
         invalid_chars = []
         expression = (
