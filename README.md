@@ -62,6 +62,8 @@ This project was updated consistently throughout development to manage the varie
 ![Table_231018_Part1](https://github.com/MiloMT/PyPassGen/assets/60989510/2a4de3d2-691c-45b2-b1ed-a138a9c380c4)
 *Table Initialization: Part 2*
 ![Table_231018_Part2](https://github.com/MiloMT/PyPassGen/assets/60989510/acc0fd65-9338-4e37-8e62-03a2e088a4b1)
+*Initial Roadmap*
+![Roadmap_231018](https://github.com/MiloMT/PyPassGen/assets/60989510/f5d69126-4bd3-43e6-a4e0-580f56e00e4c)
 *Midway through Password Generation*
 ![Table_231019_MidPassGen](https://github.com/MiloMT/PyPassGen/assets/60989510/efbf68c0-78cd-4380-807a-438d092cda0c)
 *End of Password Generation*
@@ -76,12 +78,22 @@ This project was updated consistently throughout development to manage the varie
 ![Table_231025_ExpressionDoneExcDocs](https://github.com/MiloMT/PyPassGen/assets/60989510/8bcbd252-e59f-43a8-9f55-499ae24280af)
 *Getting through encryption functionality with checklist and comments*
 ![Table_231025_PassStoreEncryptAdded](https://github.com/MiloMT/PyPassGen/assets/60989510/535cffc6-485a-4357-a9c1-f5270e18ed1f)
+*Updated Roadmap*
+![Roadmap_231026](https://github.com/MiloMT/PyPassGen/assets/60989510/00a9357e-5484-412d-afcd-2f54e2f8dcd7)
 *Starting on documentation*
 ![Table_231026_DocStart](https://github.com/MiloMT/PyPassGen/assets/60989510/7b943b12-8bbf-4635-aa47-e0ddc6049821)
 *Extra bash scripts added as required*
 ![Table_231026_ExtraScriptAdd](https://github.com/MiloMT/PyPassGen/assets/60989510/80516c6c-36b0-4e4e-ad08-9c796352f167)
 *Managing Issues through Github Interface*
 ![Table_231026_GithubIssueManagement](https://github.com/MiloMT/PyPassGen/assets/60989510/6c516490-f476-415b-b20a-16d46e3167e2)
+*Midway through bash scripts*
+![Table_231026_BashScriptsMidway](https://github.com/MiloMT/PyPassGen/assets/60989510/54cc6dbc-4438-4cda-995d-629adb047116)
+*Bashscripts Finished*
+![Table_231026_BashScriptsFinished](https://github.com/MiloMT/PyPassGen/assets/60989510/d03c6096-0ad9-4488-befb-c452d7ae565f)
+*Pytest Issues added*
+![Table_231026_PytestIssuesAdded](https://github.com/MiloMT/PyPassGen/assets/60989510/afa0d193-fd5e-44a2-a975-d6c34fa2273b)
+*Finalising all but documentation*
+![Table_231026_OnlyDocumentationLeft](https://github.com/MiloMT/PyPassGen/assets/60989510/908e8974-1d78-44c3-aae2-66e292b09be5)
 
 ## Installation Instructions
 
@@ -97,9 +109,178 @@ As for hardware requirements, you need to ensure that your system has the minimu
 - MacOS: MaxOS 10.9 or newer
 - Linux: Dependent on linux distribution, please view the official Python documentation related to your Python version.
 
+#### Python Installation
+
+As mentioned above, a Python version >= 3.10 must be installed in order to run the application or the below scripts. There is a beginner guide for installer Python available at the link below:
+
+https://wiki.python.org/moin/BeginnersGuide/Download
+
+You can also find the latest Python downloads available at this link:
+
+https://www.python.org/downloads/
+
+Python is available for any major operating system, so just ensure that you are using the relevant installation instructions for your operating system.
+
+#### Dependencies
+
+There are two external libraries used within the application. These can be found below along with their documentation and installation instructions if you would like to manually install them:
+
+- Cryptography: https://pypi.org/project/cryptography/
+- Pyperclip: https://pypi.org/project/pyperclip/
+
+The installation scripts discussed in the next section can take care of the dependency installation for you.
+
 #### Scripts
 
-There are two different installation scripts. One that installs the application dependencies within a virtual environment. And than one that installs the dependencies within the base Python installation. Once the installation scripts have been run, than there are three variations of example use cases that can be run depending on the installed environment. One for a basic password generation, one to prompt for password creation, and than lastly one to view existing passwords. Once run, please follow the prompts as required in the terminal interface.
+There are two different installation scripts. One that installs the application dependencies within a virtual environment and one that installs the dependencies within the local environment. Once the installation scripts have been run, than there are three variations of example use cases that can be run depending on the installed environment. One for a basic password generation, one to run the application in expression mode, and than lastly one to run the application in view mode.
+
+#### Step by Step Installation
+
+The below assumes you already have Python version >= 3.10 installed to your computer. If you don't, please refer to the above under Python Installation.
+
+##### 1. Downloading the Repository
+
+Firstly, you will need to ensure that you have the source code downloaded to a location on your computer. You can do this in one of two ways, you can either download a ZIP package containing all the relevant information through the menu below from the github repository (https://github.com/MiloMT/PyPassGen):
+
+![Installation_DownloadZIP](https://github.com/MiloMT/PyPassGen/assets/60989510/4c4a1e71-6bde-47e5-8b2c-74135d3ba4bd)
+
+Once downloaded, you will need to uncompress the zip package using the software of your choosing to a location that you would like to store the application. Make note of this location, as you will need it shortly.
+
+Or if you are familiar with git, you can clone the repository to a chosen local destination. The instructions for cloning a repository can be found in this link: https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
+
+##### 2. Installing Dependencies
+
+Installing the dependencies can be done in one of two ways, either using the bash scripts provided with the repository, or by installing them through python manually through pip.
+
+**PIP**
+
+In order to install the required packages through PIP, you will need to first navigate to the repository in your terminal, then run the below command.
+
+```
+pip install -r requirements.txt
+```
+
+PIP will take care of the installation procedures involved with these packages. If you are using a virtual environment, you will need to make sure that the virtual environment is activated prior to running the pip commands.
+
+If you have any issues with the above, you can refer to the official Python installing packages guide through this link: https://packaging.python.org/en/latest/tutorials/installing-packages/
+
+**Bash Scripts**
+
+There are two different installation bash scripts contained with the 'scripts' folder of the repository. In order to run them, you will need to open your terminal, navigate to the folder that contains these bash scripts, and than run them by entering the below commands:
+
+*For installing to your local environment*
+```
+./std_install.sh
+```
+
+*For installing to a virtual environment*
+```
+./venv_install.sh
+```
+
+#### 3. Have Fun!
+
+That should be all there is to it! You can now use the program. Refer to the below for run instructions.
+
+## Application Guide
+
+The application can either be run standalone or through the bash scripts that have been provided. Ensure that the installation steps have been fully completed prior to running the application.
+
+#### Standalone
+
+In order to run the application through the python file directly, you can do so by first navigating to the repository via your terminal, and than running the below command:
+
+```
+python3 main.py
+```
+
+By just running the python file as above, it will run the application using a series of default arguments. This will result in a single password being generated, composed of lower-case letters at 10 characters long:
+
+![Guide_BasicRun](https://github.com/MiloMT/PyPassGen/assets/60989510/f5048b06-c002-441c-8446-170328f8591c)
+
+Afterwards, the application will prompt whether you would like to save the password, and if you have saved, whether you would like to encrypt those passwords.
+
+The application can run in multiple modes and with multiple options depending on how you would like to operate. Some of the most common ones are:
+
+**View Mode**
+
+```
+python3 main.py --view
+```
+
+This allows you to view previously saved passwords in a passwords.txt file.
+
+**Expression Mode**
+
+```
+python3 main.py -e
+```
+
+This allows you to create an expression for password generation. Please refer to the feature list above for further explanation.
+
+**Password Manipulation**
+
+```
+python3 main.py 20 5 -uns
+```
+
+You can also manipulate the length of passwords, the amount of passwords generated, and the type of characters used in the passwords. The first integer will refer to the length of each password, the second integer refers to the amount of passwords generated, and lastly the options '-u', '-n', '-s', or in this case, '-uns', refer to the type of characters using in the passwords. In this case [U]ppercase, [N]umbers, and [S]pecial characters.
+
+For further arguments and options, you can refer to the command line arguments section below, or the in-app help guide through the below command.
+
+```
+python3 main.py -h
+```
+
+#### Scripts
+
+There are also scripts available to run the application in a more simplified version. You can run the script through by the below command when inside the 'scripts' folder in your terminal:
+
+*For running when using a local environment*
+```
+./std_run.sh
+```
+
+*For running when using a virtual environment*
+```
+./venv_run.sh
+```
+
+The bash scripts can also run with a few variations. To run the application in standard mode, you can use the below commands. These will generate 5 passwords at 10 characters each.
+
+*For running when using a local environment*
+```
+./std_run.sh std
+```
+
+*For running when using a virtual environment*
+```
+./venv_run.sh std
+```
+
+To run the application in view mode, you can use the below commands. This will just view previously saved passwords:
+
+*For running when using a local environment*
+```
+./std_run.sh view
+```
+
+*For running when using a virtual environment*
+```
+./venv_run.sh view
+```
+
+To run the application in expression mode, you can use the below commands. This will run the app and prompt the user to create an expression for the password generation. Once received, it will generate 5 passwords at 10 characters each using that expression:
+
+*For running when using a local environment*
+```
+./std_run.sh exp
+```
+
+*For running when using a virtual environment*
+```
+./venv_run.sh exp
+```
 
 ## Command Line Arguments
 
@@ -131,3 +312,11 @@ Generates a password or series of passwords given a set of parameters
 #### Style Guide
 
 - Google Python Style Guide: https://google.github.io/styleguide/pyguide.html
+
+#### Referenced Websites
+
+- Python Home Page: https://www.python.org/
+- Python Wiki: https://wiki.python.org/moin/BeginnersGuide/Download
+- Python Downloads: https://www.python.org/downloads/
+- Github Clone Instructions: https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
+- Python Installing Packages Guide: https://packaging.python.org/en/latest/tutorials/installing-packages/
