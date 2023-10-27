@@ -44,7 +44,7 @@ then
         elif [[ $# -eq 0 ]]
         then
             # Standard run if no bash script arguments passed.
-            python3 ../main.py 10 5
+            python3 ../main.py 10
             exit 0
         elif ! [[ ${arg_array[*]} =~ $1 ]]
         then
