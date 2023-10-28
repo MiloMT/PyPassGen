@@ -50,19 +50,27 @@ def arg_check(
         If variable is cleared, returns unchanged, otherwise will
         repeatedly ask for user input until inputted argument
         matches expected argument.
+
+    Raises:
+        ValueError: When a non-expected argument is found.
     """
 
-    while var not in (arg1, arg2):
-        var = (
-            input(
-                f"Sorry, but that wasn't a valid input. Please enter"
-                f"a [{arg1.upper()}] for {arg1_desc} or [{arg2.upper()}] "
-                f"for {arg2_desc}: ",
+    while True:
+        try:
+            if var not in (arg1, arg2):
+                raise ValueError
+            else:
+                break
+        except ValueError:
+            var = (
+                input(
+                    f"Sorry, but that wasn't a valid input. Please enter "
+                    f"a [{arg1.upper()}] for {arg1_desc} or [{arg2.upper()}] "
+                    f"for {arg2_desc}: ",
+                )
+                .lower()
+                .strip()
             )
-            .lower()
-            .strip()
-        )
-
     return var
 
 
@@ -282,6 +290,9 @@ def expression_gen() -> string:
 
     Returns:
         An error checked expression to be used for password generation.
+
+    Raises:
+        ValueError: When a non-expected argument is found.
     """
 
     invalid_chars: list = []
@@ -303,21 +314,26 @@ def expression_gen() -> string:
         for x in expression:
             if x not in ("l", "u", "n", "s"):
                 invalid_chars.append(x)
-        # Breaks out of check if no invalid characters
-        if len(invalid_chars) == 0:
-            break
-        # Lets user know which characters are invalid
-        invalid_char_format = "\n - ".join(invalid_chars)
-        print(
-            "\nYour expression is not valid. The invalid characters are:\n\n - "
-            f"{invalid_char_format}\n"
-        )
-        invalid_chars = []
-        expression = (
-            input("Please try to input another expression: ")
-            .lower()
-            .replace(" ", "")
-        )
+        try:
+            # If invalid characters found, raise an error.
+            if len(invalid_chars) != 0:
+                raise ValueError
+            else:
+                # Breaks out of check if no invalid characters.
+                break
+        except ValueError:
+            # Lets user know which characters are invalid.
+            invalid_char_format = "\n - ".join(invalid_chars)
+            print(
+                "\nYour expression is not valid. The invalid characters are:\n\n - "
+                f"{invalid_char_format}\n"
+            )
+            invalid_chars = []
+            expression = (
+                input("Please try to input another expression: ")
+                .lower()
+                .replace(" ", "")
+            )
 
     return expression
 
